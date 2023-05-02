@@ -3,9 +3,11 @@ from pygame.sprite import Sprite
 
 from dino_runner.utils.constants import DUCKING, JUMPING, RUNNING
 class Dinosaur(Sprite):
-    X_POS = 80
+    X_POS = 80  
     Y_POS = 310
     JUMP_VEL = 8.5
+    DUCK_POS_Y = 340
+
     def __init__(self):
         self.image = RUNNING[0]
         self.dino_rect = self.image.get_rect()
@@ -23,13 +25,13 @@ class Dinosaur(Sprite):
         if self.dino_run:
             self.run()
         if self.dino_duck:
-            self.duck
+            self.duck()
 
         if user_input[pygame.K_DOWN] and not self.dino_jump:
             self.dino_run = False
             self.dino_duck = True
             self.dino_jump = False 
-        if user_input[pygame.K_UP] and not self.dino_jump:
+        elif user_input[pygame.K_UP] and not self.dino_jump:
             self.dino_run = False
             self.dino_duck = False
             self.dino_jump = True
@@ -55,8 +57,8 @@ class Dinosaur(Sprite):
     def jump(self):
         self.image = JUMPING
         if self.dino_jump:
-            self.dino_rect.y = self.dino_rect.y - self.jump_vel * 4
-            self.jump_vel = self.jump_vel - 0.8
+            self.dino_rect.y -= self.jump_vel * 4.
+            self.jump_vel -= 0.8
 
         if self.jump_vel < -self.JUMP_VEL:
             self.dino_rect.y =self.Y_POS
@@ -65,7 +67,7 @@ class Dinosaur(Sprite):
 
     def duck(self):
         self.image = DUCKING
-        self.dino_rect.y = 340
+        self.dino_rect.y = self.DUCK_POS_Y
         if self.step_index< 5:
             self.image = DUCKING[0]
         else:
